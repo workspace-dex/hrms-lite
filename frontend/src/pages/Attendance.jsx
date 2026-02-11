@@ -113,26 +113,41 @@ function Attendance() {
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" p={4}>
-        <CircularProgress sx={{ color: '#e94560' }} />
+        <CircularProgress sx={{ color: '#2563eb' }} />
       </Box>
     );
   }
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom sx={{ color: '#fff', fontWeight: 300 }}>
+      <Typography 
+        variant="h4" 
+        gutterBottom 
+        sx={{ 
+          color: '#1e293b', 
+          fontWeight: 600,
+          letterSpacing: '0.3px',
+        }}
+      >
         Attendance Management
       </Typography>
 
       {error && (
-        <Alert severity="error" sx={{ mb: 2, bgcolor: '#16213e', color: '#fff' }} onClose={() => setError(null)}>
+        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
           {error}
         </Alert>
       )}
 
-      <Card sx={{ mb: 4, bgcolor: '#16213e', borderRadius: 2 }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom sx={{ color: '#fff', mb: 3 }}>
+      <Card 
+        sx={{ 
+          mb: 4, 
+          bgcolor: '#ffffff', 
+          borderRadius: 2,
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        }}
+      >
+        <CardContent sx={{ p: 3 }}>
+          <Typography variant="h6" gutterBottom sx={{ color: '#1e293b', mb: 3, fontWeight: 600 }}>
             Mark Attendance
           </Typography>
           <Box component="form" onSubmit={handleSubmit}>
@@ -160,18 +175,18 @@ function Attendance() {
                     ),
                   }}
                   sx={{
-                    '& .MuiInputLabel-root': { color: '#94a3b8' },
+                    '& .MuiInputLabel-root': { color: '#64748b' },
                     '& .MuiOutlinedInput-root': {
-                      color: '#fff',
-                      '& fieldset': { borderColor: '#0f3460' },
-                      '&:hover fieldset': { borderColor: '#e94560' },
+                      color: '#1e293b',
+                      '& fieldset': { borderColor: '#e2e8f0' },
+                      '&:hover fieldset': { borderColor: '#2563eb' },
                     },
                   }}
                 />
               )}
               sx={{ mb: 2 }}
               PaperComponent={({ children }) => (
-                <Paper sx={{ bgcolor: '#1a1a2e', color: '#fff' }}>{children}</Paper>
+                <Paper sx={{ bgcolor: '#ffffff' }}>{children}</Paper>
               )}
             />
 
@@ -185,28 +200,28 @@ function Attendance() {
                 required
                 sx={{
                   minWidth: 200,
-                  '& .MuiInputLabel-root': { color: '#94a3b8' },
+                  '& .MuiInputLabel-root': { color: '#64748b' },
                   '& .MuiOutlinedInput-root': {
-                    color: '#fff',
-                    '& fieldset': { borderColor: '#0f3460' },
+                    color: '#1e293b',
+                    '& fieldset': { borderColor: '#e2e8f0' },
                   },
                 }}
               />
 
               <FormControl sx={{ minWidth: 150 }}>
-                <InputLabel sx={{ color: '#94a3b8' }}>Status</InputLabel>
+                <InputLabel sx={{ color: '#64748b' }}>Status</InputLabel>
                 <Select
                   value={status}
                   label="Status"
                   onChange={(e) => setStatus(e.target.value)}
                   sx={{
-                    color: '#fff',
-                    '& .MuiOutlinedInput-notchedOutline': { borderColor: '#0f3460' },
+                    color: '#1e293b',
+                    '& .MuiOutlinedInput-notchedOutline': { borderColor: '#e2e8f0' },
                   }}
                 >
                   <MenuItem value="Present">
                     <Box display="flex" alignItems="center" gap={1}>
-                      <CheckCircleIcon sx={{ color: '#0ea5e9', fontSize: 20 }} />
+                      <CheckCircleIcon sx={{ color: '#10b981', fontSize: 20 }} />
                       Present
                     </Box>
                   </MenuItem>
@@ -224,9 +239,12 @@ function Attendance() {
                 variant="contained"
                 disabled={submitting || !selectedEmployee}
                 sx={{ 
-                  bgcolor: '#e94560', 
-                  '&:hover': { bgcolor: '#d63050' },
-                  '&.Mui-disabled': { bgcolor: '#333' }
+                  bgcolor: '#2563eb', 
+                  '&:hover': { bgcolor: '#1d4ed8' },
+                  '&.Mui-disabled': { bgcolor: '#e2e8f0', color: '#94a3b8' },
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  px: 3,
                 }}
               >
                 {submitting ? <CircularProgress size={24} /> : 'Mark Attendance'}
@@ -250,41 +268,54 @@ function Attendance() {
             ),
           }}
           sx={{
-            bgcolor: '#16213e',
+            bgcolor: '#ffffff',
             borderRadius: 1,
             '& .MuiOutlinedInput-root': {
-              color: '#fff',
-              '& fieldset': { borderColor: '#0f3460' },
-              '&:hover fieldset': { borderColor: '#e94560' },
+              color: '#1e293b',
+              '& fieldset': { borderColor: '#e2e8f0' },
+              '&:hover fieldset': { borderColor: '#2563eb' },
             },
           }}
         />
       </Box>
 
-      <Typography variant="h6" gutterBottom sx={{ color: '#fff', mb: 2 }}>
+      <Typography variant="h6" gutterBottom sx={{ color: '#1e293b', mb: 2, fontWeight: 600 }}>
         Employees
       </Typography>
 
-      <TableContainer component={Paper} sx={{ bgcolor: '#16213e', borderRadius: 2 }}>
+      <TableContainer 
+        component={Paper} 
+        sx={{ 
+          bgcolor: '#ffffff', 
+          borderRadius: 2,
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        }}
+      >
         <Table>
           <TableHead>
-            <TableRow>
-              <TableCell sx={{ color: '#94a3b8', fontWeight: 600 }}>Employee</TableCell>
-              <TableCell sx={{ color: '#94a3b8', fontWeight: 600 }}>Department</TableCell>
-              <TableCell align="right" sx={{ color: '#94a3b8', fontWeight: 600 }}>Action</TableCell>
+            <TableRow sx={{ bgcolor: '#f8fafc' }}>
+              <TableCell sx={{ color: '#475569', fontWeight: 600, fontSize: '0.875rem' }}>Employee</TableCell>
+              <TableCell sx={{ color: '#475569', fontWeight: 600, fontSize: '0.875rem' }}>Department</TableCell>
+              <TableCell align="right" sx={{ color: '#475569', fontWeight: 600, fontSize: '0.875rem' }}>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filteredEmployees.map((employee) => (
-              <TableRow key={employee.id} sx={{ '&:hover': { bgcolor: '#0f3460' } }}>
+              <TableRow 
+                key={employee.id} 
+                sx={{ 
+                  '&:hover': { bgcolor: '#f8fafc' },
+                  '&:last-child td, &:last-child th': { border: 0 },
+                }}
+              >
                 <TableCell>
                   <Box display="flex" alignItems="center" gap={2}>
-                    <Avatar sx={{ bgcolor: '#e94560', width: 40, height: 40 }}>
+                    <Avatar sx={{ bgcolor: '#2563eb', width: 40, height: 40 }}>
                       <PersonIcon />
                     </Avatar>
                     <Box>
-                      <Typography sx={{ color: '#fff', fontWeight: 500 }}>{employee.full_name}</Typography>
-                      <Typography sx={{ color: '#94a3b8', fontSize: '0.875rem' }}>{employee.employee_id}</Typography>
+                      <Typography sx={{ color: '#1e293b', fontWeight: 500 }}>{employee.full_name}</Typography>
+                      <Typography sx={{ color: '#64748b', fontSize: '0.875rem' }}>{employee.employee_id}</Typography>
                     </Box>
                   </Box>
                 </TableCell>
@@ -292,7 +323,7 @@ function Attendance() {
                   <Chip 
                     label={employee.department} 
                     size="small"
-                    sx={{ bgcolor: '#0f3460', color: '#fff' }}
+                    sx={{ bgcolor: '#f1f5f9', color: '#475569', fontWeight: 500 }}
                   />
                 </TableCell>
                 <TableCell align="right">
@@ -301,9 +332,11 @@ function Attendance() {
                     size="small"
                     onClick={() => handleViewAttendance(employee.id)}
                     sx={{ 
-                      borderColor: '#0ea5e9', 
-                      color: '#0ea5e9',
-                      '&:hover': { borderColor: '#0ea5e9', bgcolor: 'rgba(14, 165, 233, 0.1)' }
+                      borderColor: '#2563eb', 
+                      color: '#2563eb',
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      '&:hover': { borderColor: '#1d4ed8', bgcolor: '#eff6ff' }
                     }}
                   >
                     View Attendance
@@ -317,22 +350,29 @@ function Attendance() {
 
       {viewingEmployee && (
         <Box mt={4}>
-          <Typography variant="h6" gutterBottom sx={{ color: '#fff' }}>
+          <Typography variant="h6" gutterBottom sx={{ color: '#1e293b', fontWeight: 600 }}>
             Attendance Records for {viewingEmployee.full_name}
           </Typography>
-          <TableContainer component={Paper} sx={{ bgcolor: '#16213e', borderRadius: 2 }}>
+          <TableContainer 
+            component={Paper} 
+            sx={{ 
+              bgcolor: '#ffffff', 
+              borderRadius: 2,
+              boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+            }}
+          >
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell sx={{ color: '#94a3b8', fontWeight: 600 }}>Date</TableCell>
-                  <TableCell sx={{ color: '#94a3b8', fontWeight: 600 }}>Status</TableCell>
+                <TableRow sx={{ bgcolor: '#f8fafc' }}>
+                  <TableCell sx={{ color: '#475569', fontWeight: 600 }}>Date</TableCell>
+                  <TableCell sx={{ color: '#475569', fontWeight: 600 }}>Status</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {attendanceRecords.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={2} align="center">
-                      <Typography sx={{ color: '#94a3b8', py: 2 }}>
+                      <Typography sx={{ color: '#64748b', py: 3 }}>
                         No attendance records found
                       </Typography>
                     </TableCell>
@@ -340,21 +380,21 @@ function Attendance() {
                 ) : (
                   attendanceRecords.map((record) => (
                     <TableRow key={record.id}>
-                      <TableCell sx={{ color: '#fff' }}>{record.date}</TableCell>
+                      <TableCell sx={{ color: '#1e293b' }}>{record.date}</TableCell>
                       <TableCell>
                         {record.status === 'Present' ? (
                           <Chip
                             icon={<CheckCircleIcon />}
                             label="Present"
                             size="small"
-                            sx={{ bgcolor: 'rgba(14, 165, 233, 0.2)', color: '#0ea5e9', borderColor: '#0ea5e9' }}
+                            sx={{ bgcolor: '#d1fae5', color: '#059669', fontWeight: 500 }}
                           />
                         ) : (
                           <Chip
                             icon={<CancelIcon />}
                             label="Absent"
                             size="small"
-                            sx={{ bgcolor: 'rgba(245, 158, 11, 0.2)', color: '#f59e0b', borderColor: '#f59e0b' }}
+                            sx={{ bgcolor: '#fef3c7', color: '#d97706', fontWeight: 500 }}
                           />
                         )}
                       </TableCell>

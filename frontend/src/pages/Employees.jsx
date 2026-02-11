@@ -109,7 +109,7 @@ function Employees() {
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" p={4}>
-        <CircularProgress sx={{ color: '#e94560' }} />
+        <CircularProgress sx={{ color: '#2563eb' }} />
       </Box>
     );
   }
@@ -117,19 +117,27 @@ function Employees() {
   return (
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4" sx={{ color: '#fff', fontWeight: 300 }}>Employees</Typography>
+        <Typography variant="h4" sx={{ color: '#1e293b', fontWeight: 600, letterSpacing: '0.3px' }}>
+          Employees
+        </Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => setOpenDialog(true)}
-          sx={{ bgcolor: '#e94560', '&:hover': { bgcolor: '#d63050' } }}
+          sx={{ 
+            bgcolor: '#2563eb', 
+            '&:hover': { bgcolor: '#1d4ed8' },
+            textTransform: 'none',
+            fontWeight: 600,
+            px: 3,
+          }}
         >
           Add Employee
         </Button>
       </Box>
 
       {error && (
-        <Alert severity="error" sx={{ mb: 2, bgcolor: '#16213e', color: '#fff' }}>
+        <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
       )}
@@ -148,50 +156,63 @@ function Employees() {
             ),
           }}
           sx={{
-            bgcolor: '#16213e',
+            bgcolor: '#ffffff',
             borderRadius: 1,
             '& .MuiOutlinedInput-root': {
-              color: '#fff',
-              '& fieldset': { borderColor: '#0f3460' },
-              '&:hover fieldset': { borderColor: '#e94560' },
-              '&.Mui-focused fieldset': { borderColor: '#e94560' },
+              color: '#1e293b',
+              '& fieldset': { borderColor: '#e2e8f0' },
+              '&:hover fieldset': { borderColor: '#2563eb' },
+              '&.Mui-focused fieldset': { borderColor: '#2563eb' },
             },
           }}
         />
       </Box>
 
-      <TableContainer component={Paper} sx={{ bgcolor: '#16213e' }}>
+      <TableContainer 
+        component={Paper} 
+        sx={{ 
+          bgcolor: '#ffffff',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+          borderRadius: 2,
+        }}
+      >
         <Table>
           <TableHead>
-            <TableRow>
-              <TableCell sx={{ color: '#94a3b8', fontWeight: 600 }}>Employee ID</TableCell>
-              <TableCell sx={{ color: '#94a3b8', fontWeight: 600 }}>Full Name</TableCell>
-              <TableCell sx={{ color: '#94a3b8', fontWeight: 600 }}>Email</TableCell>
-              <TableCell sx={{ color: '#94a3b8', fontWeight: 600 }}>Department</TableCell>
-              <TableCell sx={{ color: '#94a3b8', fontWeight: 600 }}>Hire Date</TableCell>
-              <TableCell align="right" sx={{ color: '#94a3b8', fontWeight: 600 }}>Actions</TableCell>
+            <TableRow sx={{ bgcolor: '#f8fafc' }}>
+              <TableCell sx={{ color: '#475569', fontWeight: 600, fontSize: '0.875rem' }}>Employee ID</TableCell>
+              <TableCell sx={{ color: '#475569', fontWeight: 600, fontSize: '0.875rem' }}>Full Name</TableCell>
+              <TableCell sx={{ color: '#475569', fontWeight: 600, fontSize: '0.875rem' }}>Email</TableCell>
+              <TableCell sx={{ color: '#475569', fontWeight: 600, fontSize: '0.875rem' }}>Department</TableCell>
+              <TableCell sx={{ color: '#475569', fontWeight: 600, fontSize: '0.875rem' }}>Hire Date</TableCell>
+              <TableCell align="right" sx={{ color: '#475569', fontWeight: 600, fontSize: '0.875rem' }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filteredEmployees.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} align="center">
-                  <Typography sx={{ color: '#94a3b8', py: 3 }}>
+                  <Typography sx={{ color: '#64748b', py: 4 }}>
                     {searchQuery ? 'No employees match your search.' : 'No employees found. Add your first employee!'}
                   </Typography>
                 </TableCell>
               </TableRow>
             ) : (
               filteredEmployees.map((employee) => (
-                <TableRow key={employee.id} sx={{ '&:hover': { bgcolor: '#0f3460' } }}>
-                  <TableCell sx={{ color: '#fff' }}>{employee.employee_id}</TableCell>
-                  <TableCell sx={{ color: '#fff' }}>{employee.full_name}</TableCell>
-                  <TableCell sx={{ color: '#fff' }}>{employee.email}</TableCell>
-                  <TableCell sx={{ color: '#fff' }}>{employee.department}</TableCell>
-                  <TableCell sx={{ color: '#fff' }}>{employee.hire_date}</TableCell>
+                <TableRow 
+                  key={employee.id} 
+                  sx={{ 
+                    '&:hover': { bgcolor: '#f8fafc' },
+                    '&:last-child td, &:last-child th': { border: 0 },
+                  }}
+                >
+                  <TableCell sx={{ color: '#1e293b', fontWeight: 500 }}>{employee.employee_id}</TableCell>
+                  <TableCell sx={{ color: '#334155' }}>{employee.full_name}</TableCell>
+                  <TableCell sx={{ color: '#64748b' }}>{employee.email}</TableCell>
+                  <TableCell sx={{ color: '#334155' }}>{employee.department}</TableCell>
+                  <TableCell sx={{ color: '#64748b' }}>{employee.hire_date}</TableCell>
                   <TableCell align="right">
                     <IconButton
-                      sx={{ color: '#e94560', '&:hover': { color: '#ff6b6b' } }}
+                      sx={{ color: '#ef4444', '&:hover': { color: '#dc2626', bgcolor: '#fef2f2' } }}
                       onClick={() => handleDelete(employee.id)}
                     >
                       <DeleteIcon />
@@ -204,12 +225,19 @@ function Employees() {
         </Table>
       </TableContainer>
 
-      {/* Add Employee Dialog */}
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth PaperProps={{ sx: { bgcolor: '#16213e' } }}>
-        <DialogTitle sx={{ color: '#fff' }}>Add New Employee</DialogTitle>
+      <Dialog 
+        open={openDialog} 
+        onClose={() => setOpenDialog(false)} 
+        maxWidth="sm" 
+        fullWidth
+        PaperProps={{ sx: { borderRadius: 2 } }}
+      >
+        <DialogTitle sx={{ color: '#1e293b', fontWeight: 600, pb: 1 }}>
+          Add New Employee
+        </DialogTitle>
         <DialogContent>
           {formError && (
-            <Alert severity="error" sx={{ mb: 2, bgcolor: '#1a1a2e' }}>
+            <Alert severity="error" sx={{ mb: 2 }}>
               {formError}
             </Alert>
           )}
@@ -222,7 +250,7 @@ function Employees() {
               onChange={handleInputChange}
               margin="normal"
               required
-              sx={{ '& .MuiInputLabel-root': { color: '#94a3b8' }, '& .MuiOutlinedInput-root': { color: '#fff', '& fieldset': { borderColor: '#0f3460' } } }}
+              sx={{ '& .MuiInputLabel-root': { color: '#64748b' } }}
             />
             <TextField
               fullWidth
@@ -232,7 +260,7 @@ function Employees() {
               onChange={handleInputChange}
               margin="normal"
               required
-              sx={{ '& .MuiInputLabel-root': { color: '#94a3b8' }, '& .MuiOutlinedInput-root': { color: '#fff', '& fieldset': { borderColor: '#0f3460' } } }}
+              sx={{ '& .MuiInputLabel-root': { color: '#64748b' } }}
             />
             <TextField
               fullWidth
@@ -243,7 +271,7 @@ function Employees() {
               onChange={handleInputChange}
               margin="normal"
               required
-              sx={{ '& .MuiInputLabel-root': { color: '#94a3b8' }, '& .MuiOutlinedInput-root': { color: '#fff', '& fieldset': { borderColor: '#0f3460' } } }}
+              sx={{ '& .MuiInputLabel-root': { color: '#64748b' } }}
             />
             <TextField
               fullWidth
@@ -253,7 +281,7 @@ function Employees() {
               onChange={handleInputChange}
               margin="normal"
               required
-              sx={{ '& .MuiInputLabel-root': { color: '#94a3b8' }, '& .MuiOutlinedInput-root': { color: '#fff', '& fieldset': { borderColor: '#0f3460' } } }}
+              sx={{ '& .MuiInputLabel-root': { color: '#64748b' } }}
             />
             <TextField
               fullWidth
@@ -265,17 +293,25 @@ function Employees() {
               margin="normal"
               required
               InputLabelProps={{ shrink: true }}
-              sx={{ '& .MuiInputLabel-root': { color: '#94a3b8' }, '& .MuiOutlinedInput-root': { color: '#fff', '& fieldset': { borderColor: '#0f3460' } } }}
+              sx={{ '& .MuiInputLabel-root': { color: '#64748b' } }}
             />
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenDialog(false)} sx={{ color: '#94a3b8' }}>Cancel</Button>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button onClick={() => setOpenDialog(false)} sx={{ color: '#64748b', textTransform: 'none' }}>
+            Cancel
+          </Button>
           <Button
             onClick={handleSubmit}
             variant="contained"
             disabled={submitting}
-            sx={{ bgcolor: '#e94560', '&:hover': { bgcolor: '#d63050' } }}
+            sx={{ 
+              bgcolor: '#2563eb', 
+              '&:hover': { bgcolor: '#1d4ed8' },
+              textTransform: 'none',
+              fontWeight: 600,
+              px: 3,
+            }}
           >
             {submitting ? <CircularProgress size={24} /> : 'Add Employee'}
           </Button>
