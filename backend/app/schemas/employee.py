@@ -4,7 +4,7 @@ Pydantic schemas for request/response validation and serialization.
 
 from datetime import date, datetime
 from typing import Optional
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field
 
 from app.models.employee import AttendanceStatus
 
@@ -25,10 +25,11 @@ class EmployeeCreate(EmployeeBase):
 
 class EmployeeResponse(EmployeeBase):
     """Schema for employee response data."""
-    model_config = ConfigDict(from_attributes=True)
-    
     id: int = Field(..., description="Database ID")
     created_at: datetime = Field(..., description="Record creation timestamp")
+    
+    class Config:
+        orm_mode = True
 
 
 class AttendanceBase(BaseModel):
@@ -47,15 +48,19 @@ class AttendanceCreate(BaseModel):
 
 class AttendanceResponse(AttendanceBase):
     """Schema for attendance response data."""
-    model_config = ConfigDict(from_attributes=True)
-    
     id: int = Field(..., description="Database ID")
     created_at: datetime = Field(..., description="Record creation timestamp")
+    
+    class Config:
+        orm_mode = True
 
 
 class AttendanceWithEmployee(AttendanceResponse):
     """Attendance record with full employee details."""
     employee: EmployeeResponse = Field(..., description="Employee details")
+    
+    class Config:
+        orm_mode = True
 
 
 class DashboardStats(BaseModel):
@@ -63,12 +68,3 @@ class DashboardStats(BaseModel):
     total_employees: int = Field(..., ge=0, description="Total number of employees")
     present_today: int = Field(..., ge=0, description="Number of employees present today")
     absent_today: int = Field(..., ge=0, description="Number of employees absent today")
-
-
-class PaginatedResponse(BaseModel):
-    """Generic paginated response wrapper."""
-    items: list
-    total: int
-    page: int
-    page_size: int
-    pages: int
