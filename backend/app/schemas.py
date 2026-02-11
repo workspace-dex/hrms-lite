@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, validator
+from pydantic import BaseModel, EmailStr, field_validator
 from typing import Optional, List
 from datetime import date, datetime
 from app.models import AttendanceStatus
@@ -11,33 +11,33 @@ class EmployeeBase(BaseModel):
     department: str
 
 class EmployeeCreate(EmployeeBase):
-    @validator('employee_id')
+    @field_validator('employee_id')
+    @classmethod
     def validate_employee_id(cls, v):
         if not v or len(v.strip()) == 0:
             raise ValueError('Employee ID cannot be empty')
         return v.strip()
     
-    @validator('full_name')
+    @field_validator('full_name')
+    @classmethod
     def validate_full_name(cls, v):
         if not v or len(v.strip()) == 0:
             raise ValueError('Full name cannot be empty')
         return v.strip()
     
-    @validator('department')
+    @field_validator('department')
+    @classmethod
     def validate_department(cls, v):
         if not v or len(v.strip()) == 0:
             raise ValueError('Department cannot be empty')
         return v.strip()
-    
-    class Config:
-        orm_mode = True
 
 class EmployeeResponse(EmployeeBase):
     id: int
     created_at: datetime
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Attendance Schemas
 class AttendanceBase(BaseModel):
@@ -49,9 +49,6 @@ class AttendanceCreate(BaseModel):
     employee_id: int
     date: date
     status: AttendanceStatus
-    
-    class Config:
-        orm_mode = True
 
 class AttendanceResponse(BaseModel):
     id: int
@@ -61,19 +58,16 @@ class AttendanceResponse(BaseModel):
     created_at: datetime
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class AttendanceWithEmployee(AttendanceResponse):
     employee: EmployeeResponse
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Dashboard Schema
 class DashboardStats(BaseModel):
     total_employees: int
     present_today: int
     absent_today: int
-    
-    class Config:
-        orm_mode = True
