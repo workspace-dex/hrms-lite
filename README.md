@@ -215,4 +215,4 @@ This project is created for interview assessment purposes.
 
 ## 👨‍💻 Author
 
-Created for Ethara AI Interview Assignment
+Shakib S.
