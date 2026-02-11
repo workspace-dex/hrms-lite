@@ -1,6 +1,11 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr
 from datetime import date, datetime
-from app.models import AttendanceStatus
+from typing import Optional
+from enum import Enum
+
+class AttendanceStatus(str, Enum):
+    PRESENT = "Present"
+    ABSENT = "Absent"
 
 # Employee Schemas
 class EmployeeBase(BaseModel):
@@ -10,15 +15,15 @@ class EmployeeBase(BaseModel):
     department: str
     hire_date: date
 
+    class Config:
+        orm_mode = True
+
 class EmployeeCreate(EmployeeBase):
     pass
 
 class EmployeeResponse(EmployeeBase):
     id: int
     created_at: datetime
-    
-    class Config:
-        orm_mode = True
 
 # Attendance Schemas
 class AttendanceBase(BaseModel):
@@ -26,26 +31,18 @@ class AttendanceBase(BaseModel):
     date: date
     status: AttendanceStatus
 
-class AttendanceCreate(BaseModel):
-    employee_id: int
-    date: date
-    status: AttendanceStatus
-
-class AttendanceResponse(BaseModel):
-    id: int
-    employee_id: int
-    date: date
-    status: AttendanceStatus
-    created_at: datetime
-    
     class Config:
         orm_mode = True
+
+class AttendanceCreate(AttendanceBase):
+    pass
+
+class AttendanceResponse(AttendanceBase):
+    id: int
+    created_at: datetime
 
 class AttendanceWithEmployee(AttendanceResponse):
     employee: EmployeeResponse
-    
-    class Config:
-        orm_mode = True
 
 # Dashboard Schema
 class DashboardStats(BaseModel):
