@@ -28,13 +28,16 @@ class EmployeeCreate(EmployeeBase):
         if not v or len(v.strip()) == 0:
             raise ValueError('Department cannot be empty')
         return v.strip()
+    
+    class Config:
+        orm_mode = True
 
 class EmployeeResponse(EmployeeBase):
     id: int
     created_at: datetime
     
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 # Attendance Schemas
 class AttendanceBase(BaseModel):
@@ -46,6 +49,9 @@ class AttendanceCreate(BaseModel):
     employee_id: int
     date: date
     status: AttendanceStatus
+    
+    class Config:
+        orm_mode = True
 
 class AttendanceResponse(BaseModel):
     id: int
@@ -55,16 +61,19 @@ class AttendanceResponse(BaseModel):
     created_at: datetime
     
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 class AttendanceWithEmployee(AttendanceResponse):
     employee: EmployeeResponse
     
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 # Dashboard Schema
 class DashboardStats(BaseModel):
     total_employees: int
     present_today: int
     absent_today: int
+    
+    class Config:
+        orm_mode = True
