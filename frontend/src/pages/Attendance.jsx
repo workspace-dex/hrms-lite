@@ -19,16 +19,23 @@ import {
   CircularProgress,
   Card,
   CardContent,
+  Autocomplete,
+  InputAdornment,
+  Chip,
+  Avatar,
 } from '@mui/material';
 import {
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
+  Search as SearchIcon,
+  Person as PersonIcon,
 } from '@mui/icons-material';
 import { getEmployees, createAttendance, getAttendanceByEmployee } from '../services/api';
 
 function Attendance() {
   const [employees, setEmployees] = useState([]);
-  const [selectedEmployee, setSelectedEmployee] = useState('');
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [status, setStatus] = useState('Present');
   const [attendanceRecords, setAttendanceRecords] = useState([]);
@@ -54,21 +61,26 @@ function Attendance() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!selectedEmployee) {
+      setError('Please select an employee');
+      return;
+    }
+    
     setError(null);
     setSubmitting(true);
 
     try {
       await createAttendance({
-        employee_id: parseInt(selectedEmployee),
+        employee_id: selectedEmployee.id,
         date: selectedDate,
         status: status,
       });
       
-      // Refresh attendance records if viewing the same employee
-      if (viewingEmployee && viewingEmployee.id === parseInt(selectedEmployee)) {
-        fetchAttendanceRecords(parseInt(selectedEmployee));
+      if (viewingEmployee && viewingEmployee.id === selectedEmployee.id) {
+        fetchAttendanceRecords(selectedEmployee.id);
       }
       
+      setError(null);
       alert('Attendance marked successfully!');
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to mark attendance');
@@ -92,105 +104,207 @@ function Attendance() {
     fetchAttendanceRecords(employeeId);
   };
 
+  const filteredEmployees = employees.filter(emp => 
+    emp.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    emp.employee_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    emp.department.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" p={4}>
-        <CircularProgress />
+        <CircularProgress sx={{ color: '#e94560' }} />
       </Box>
     );
   }
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom sx={{ color: '#fff', fontWeight: 300 }}>
         Attendance Management
       </Typography>
 
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+        <Alert severity="error" sx={{ mb: 2, bgcolor: '#16213e', color: '#fff' }} onClose={() => setError(null)}>
           {error}
         </Alert>
       )}
 
-      <Card sx={{ mb: 4 }}>
+      <Card sx={{ mb: 4, bgcolor: '#16213e', borderRadius: 2 }}>
         <CardContent>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom sx={{ color: '#fff', mb: 3 }}>
             Mark Attendance
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
-            <FormControl sx={{ minWidth: 200 }}>
-              <InputLabel>Employee</InputLabel>
-              <Select
-                value={selectedEmployee}
-                label="Employee"
-                onChange={(e) => setSelectedEmployee(e.target.value)}
-                required
-              >
-                {employees.map((emp) => (
-                  <MenuItem key={emp.id} value={emp.id}>
-                    {emp.full_name} ({emp.employee_id})
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <TextField
-              label="Date"
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-              required
+          <Box component="form" onSubmit={handleSubmit}>
+            <Autocomplete
+              options={employees}
+              getOptionLabel={(option) => `${option.full_name} (${option.employee_id}) - ${option.department}`}
+              value={selectedEmployee}
+              onChange={(event, newValue) => {
+                setSelectedEmployee(newValue);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Search and Select Employee"
+                  required
+                  InputProps={{
+                    ...params.InputProps,
+                    startAdornment: (
+                      <>
+                        <InputAdornment position="start">
+                          <SearchIcon sx={{ color: '#94a3b8' }} />
+                        </InputAdornment>
+                        {params.InputProps.startAdornment}
+                      </>
+                    ),
+                  }}
+                  sx={{
+                    '& .MuiInputLabel-root': { color: '#94a3b8' },
+                    '& .MuiOutlinedInput-root': {
+                      color: '#fff',
+                      '& fieldset': { borderColor: '#0f3460' },
+                      '&:hover fieldset': { borderColor: '#e94560' },
+                    },
+                  }}
+                />
+              )}
+              sx={{ mb: 2 }}
+              PaperComponent={({ children }) => (
+                <Paper sx={{ bgcolor: '#1a1a2e', color: '#fff' }}>{children}</Paper>
+              )}
             />
 
-            <FormControl sx={{ minWidth: 150 }}>
-              <InputLabel>Status</InputLabel>
-              <Select
-                value={status}
-                label="Status"
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <MenuItem value="Present">Present</MenuItem>
-                <MenuItem value="Absent">Absent</MenuItem>
-              </Select>
-            </FormControl>
+            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center', mt: 2 }}>
+              <TextField
+                label="Date"
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+                required
+                sx={{
+                  minWidth: 200,
+                  '& .MuiInputLabel-root': { color: '#94a3b8' },
+                  '& .MuiOutlinedInput-root': {
+                    color: '#fff',
+                    '& fieldset': { borderColor: '#0f3460' },
+                  },
+                }}
+              />
 
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={submitting || !selectedEmployee}
-            >
-              {submitting ? <CircularProgress size={24} /> : 'Mark Attendance'}
-            </Button>
+              <FormControl sx={{ minWidth: 150 }}>
+                <InputLabel sx={{ color: '#94a3b8' }}>Status</InputLabel>
+                <Select
+                  value={status}
+                  label="Status"
+                  onChange={(e) => setStatus(e.target.value)}
+                  sx={{
+                    color: '#fff',
+                    '& .MuiOutlinedInput-notchedOutline': { borderColor: '#0f3460' },
+                  }}
+                >
+                  <MenuItem value="Present">
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <CheckCircleIcon sx={{ color: '#0ea5e9', fontSize: 20 }} />
+                      Present
+                    </Box>
+                  </MenuItem>
+                  <MenuItem value="Absent">
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <CancelIcon sx={{ color: '#f59e0b', fontSize: 20 }} />
+                      Absent
+                    </Box>
+                  </MenuItem>
+                </Select>
+              </FormControl>
+
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={submitting || !selectedEmployee}
+                sx={{ 
+                  bgcolor: '#e94560', 
+                  '&:hover': { bgcolor: '#d63050' },
+                  '&.Mui-disabled': { bgcolor: '#333' }
+                }}
+              >
+                {submitting ? <CircularProgress size={24} /> : 'Mark Attendance'}
+              </Button>
+            </Box>
           </Box>
         </CardContent>
       </Card>
 
-      <Typography variant="h6" gutterBottom>
+      <Box mb={3}>
+        <TextField
+          fullWidth
+          placeholder="Search employees..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon sx={{ color: '#94a3b8' }} />
+              </InputAdornment>
+            ),
+          }}
+          sx={{
+            bgcolor: '#16213e',
+            borderRadius: 1,
+            '& .MuiOutlinedInput-root': {
+              color: '#fff',
+              '& fieldset': { borderColor: '#0f3460' },
+              '&:hover fieldset': { borderColor: '#e94560' },
+            },
+          }}
+        />
+      </Box>
+
+      <Typography variant="h6" gutterBottom sx={{ color: '#fff', mb: 2 }}>
         Employees
       </Typography>
 
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ bgcolor: '#16213e', borderRadius: 2 }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Employee ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Department</TableCell>
-              <TableCell align="right">Action</TableCell>
+              <TableCell sx={{ color: '#94a3b8', fontWeight: 600 }}>Employee</TableCell>
+              <TableCell sx={{ color: '#94a3b8', fontWeight: 600 }}>Department</TableCell>
+              <TableCell align="right" sx={{ color: '#94a3b8', fontWeight: 600 }}>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {employees.map((employee) => (
-              <TableRow key={employee.id}>
-                <TableCell>{employee.employee_id}</TableCell>
-                <TableCell>{employee.full_name}</TableCell>
-                <TableCell>{employee.department}</TableCell>
+            {filteredEmployees.map((employee) => (
+              <TableRow key={employee.id} sx={{ '&:hover': { bgcolor: '#0f3460' } }}>
+                <TableCell>
+                  <Box display="flex" alignItems="center" gap={2}>
+                    <Avatar sx={{ bgcolor: '#e94560', width: 40, height: 40 }}>
+                      <PersonIcon />
+                    </Avatar>
+                    <Box>
+                      <Typography sx={{ color: '#fff', fontWeight: 500 }}>{employee.full_name}</Typography>
+                      <Typography sx={{ color: '#94a3b8', fontSize: '0.875rem' }}>{employee.employee_id}</Typography>
+                    </Box>
+                  </Box>
+                </TableCell>
+                <TableCell>
+                  <Chip 
+                    label={employee.department} 
+                    size="small"
+                    sx={{ bgcolor: '#0f3460', color: '#fff' }}
+                  />
+                </TableCell>
                 <TableCell align="right">
                   <Button
                     variant="outlined"
                     size="small"
                     onClick={() => handleViewAttendance(employee.id)}
+                    sx={{ 
+                      borderColor: '#0ea5e9', 
+                      color: '#0ea5e9',
+                      '&:hover': { borderColor: '#0ea5e9', bgcolor: 'rgba(14, 165, 233, 0.1)' }
+                    }}
                   >
                     View Attendance
                   </Button>
@@ -203,22 +317,22 @@ function Attendance() {
 
       {viewingEmployee && (
         <Box mt={4}>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom sx={{ color: '#fff' }}>
             Attendance Records for {viewingEmployee.full_name}
           </Typography>
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} sx={{ bgcolor: '#16213e', borderRadius: 2 }}>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Status</TableCell>
+                  <TableCell sx={{ color: '#94a3b8', fontWeight: 600 }}>Date</TableCell>
+                  <TableCell sx={{ color: '#94a3b8', fontWeight: 600 }}>Status</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {attendanceRecords.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={2} align="center">
-                      <Typography color="textSecondary" py={2}>
+                      <Typography sx={{ color: '#94a3b8', py: 2 }}>
                         No attendance records found
                       </Typography>
                     </TableCell>
@@ -226,18 +340,22 @@ function Attendance() {
                 ) : (
                   attendanceRecords.map((record) => (
                     <TableRow key={record.id}>
-                      <TableCell>{record.date}</TableCell>
+                      <TableCell sx={{ color: '#fff' }}>{record.date}</TableCell>
                       <TableCell>
                         {record.status === 'Present' ? (
-                          <Box display="flex" alignItems="center" gap={1} color="success.main">
-                            <CheckCircleIcon fontSize="small" />
-                            <Typography color="success.main">Present</Typography>
-                          </Box>
+                          <Chip
+                            icon={<CheckCircleIcon />}
+                            label="Present"
+                            size="small"
+                            sx={{ bgcolor: 'rgba(14, 165, 233, 0.2)', color: '#0ea5e9', borderColor: '#0ea5e9' }}
+                          />
                         ) : (
-                          <Box display="flex" alignItems="center" gap={1} color="error.main">
-                            <CancelIcon fontSize="small" />
-                            <Typography color="error.main">Absent</Typography>
-                          </Box>
+                          <Chip
+                            icon={<CancelIcon />}
+                            label="Absent"
+                            size="small"
+                            sx={{ bgcolor: 'rgba(245, 158, 11, 0.2)', color: '#f59e0b', borderColor: '#f59e0b' }}
+                          />
                         )}
                       </TableCell>
                     </TableRow>

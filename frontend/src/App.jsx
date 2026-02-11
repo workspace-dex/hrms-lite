@@ -11,18 +11,23 @@ import {
   ListItemText,
   Box,
   CssBaseline,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
   People as PeopleIcon,
   EventNote as EventNoteIcon,
+  Menu as MenuIcon,
+  ChevronLeft as ChevronLeftIcon,
 } from '@mui/icons-material';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import Employees from './pages/Employees';
 import Attendance from './pages/Attendance';
 
-const drawerWidth = 240;
+const drawerWidth = 200;
+const collapsedWidth = 60;
 
 const menuItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
@@ -30,38 +35,64 @@ const menuItems = [
   { text: 'Attendance', icon: <EventNoteIcon />, path: '/attendance' },
 ];
 
-function Navigation() {
+function Navigation({ open, toggleDrawer }) {
   const location = useLocation();
   
   return (
     <Drawer
       variant="permanent"
       sx={{
-        width: drawerWidth,
+        width: open ? drawerWidth : collapsedWidth,
         flexShrink: 0,
+        transition: 'width 0.3s',
         '& .MuiDrawer-paper': {
-          width: drawerWidth,
+          width: open ? drawerWidth : collapsedWidth,
           boxSizing: 'border-box',
+          transition: 'width 0.3s',
+          overflowX: 'hidden',
+          bgcolor: '#1a1a2e',
+          color: '#fff',
         },
       }}
     >
-      <Toolbar>
-        <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 'bold' }}>
-          HRMS Lite
-        </Typography>
+      <Toolbar sx={{ justifyContent: open ? 'space-between' : 'center', px: 1 }}>
+        {open && (
+          <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 'bold', color: '#fff' }}>
+            HRMS
+          </Typography>
+        )}
+        <IconButton onClick={toggleDrawer} sx={{ color: '#fff' }}>
+          {open ? <ChevronLeftIcon /> : <MenuIcon />}
+        </IconButton>
       </Toolbar>
       <List>
         {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton
-              component={Link}
-              to={item.path}
-              selected={location.pathname === item.path}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
+          <Tooltip title={!open ? item.text : ''} placement="right" key={item.text}>
+            <ListItem disablePadding>
+              <ListItemButton
+                component={Link}
+                to={item.path}
+                selected={location.pathname === item.path}
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                  color: '#fff',
+                  '&.Mui-selected': {
+                    bgcolor: '#16213e',
+                  },
+                  '&:hover': {
+                    bgcolor: '#0f3460',
+                  },
+                }}
+              >
+                <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: open ? 2 : 'auto', justifyContent: 'center' }}>
+                  {item.icon}
+                </ListItemIcon>
+                {open && <ListItemText primary={item.text} />}
+              </ListItemButton>
+            </ListItem>
+          </Tooltip>
         ))}
       </List>
     </Drawer>
@@ -69,13 +100,24 @@ function Navigation() {
 }
 
 function App() {
+  const [drawerOpen, setDrawerOpen] = useState(true);
+  
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
   return (
     <Router>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar
           position="fixed"
-          sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
+          sx={{
+            width: `calc(100% - ${drawerOpen ? drawerWidth : collapsedWidth}px)`,
+            ml: `${drawerOpen ? drawerWidth : collapsedWidth}px`,
+            transition: 'width 0.3s, margin 0.3s',
+            bgcolor: '#16213e',
+          }}
         >
           <Toolbar>
             <Typography variant="h6" noWrap component="div">
@@ -83,14 +125,16 @@ function App() {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Navigation />
+        <Navigation open={drawerOpen} toggleDrawer={toggleDrawer} />
         <Box
           component="main"
           sx={{
             flexGrow: 1,
-            bgcolor: 'background.default',
+            bgcolor: '#0f0f1e',
+            minHeight: '100vh',
             p: 3,
-            mt: 8,
+            pt: 10,
+            transition: 'margin 0.3s',
           }}
         >
           <Routes>

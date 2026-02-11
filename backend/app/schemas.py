@@ -9,6 +9,7 @@ class EmployeeBase(BaseModel):
     full_name: str
     email: EmailStr
     department: str
+    hire_date: date
 
 class EmployeeCreate(EmployeeBase):
     pass

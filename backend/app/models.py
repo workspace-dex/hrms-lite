@@ -16,6 +16,7 @@ class Employee(Base):
     full_name = Column(String(100), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     department = Column(String(50), nullable=False)
+    hire_date = Column(Date, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     
     # Relationship
