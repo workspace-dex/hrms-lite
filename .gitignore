@@ -1,0 +1,13 @@
+# HRMS Lite
+
+node_modules/
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+*.db
+*.sqlite
+.vscode/
+.idea/
+.DS_Store
