@@ -13,7 +13,7 @@ services:
       - key: ALLOWED_ORIGINS
         value: "https://hrms-lite-eight-peach.vercel.app"
 
-  - type: postgres
-    name: hrms-db
+databases:
+  - name: hrms-db
     plan: free
     ipAllowList: []
