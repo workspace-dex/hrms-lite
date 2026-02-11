@@ -19,6 +19,7 @@ import {
   Alert,
   CircularProgress,
   InputAdornment,
+  Snackbar,
 } from '@mui/material';
 import {
   Delete as DeleteIcon,
@@ -43,6 +44,7 @@ function Employees() {
   });
   const [formError, setFormError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     fetchEmployees();
@@ -80,6 +82,7 @@ function Employees() {
       await createEmployee(formData);
       setOpenDialog(false);
       setFormData({ employee_id: '', full_name: '', email: '', department: '', hire_date: new Date().toISOString().split('T')[0] });
+      setSuccessMessage('Employee added successfully!');
       fetchEmployees();
     } catch (err) {
       setFormError(err.response?.data?.detail || 'Failed to create employee');
@@ -93,6 +96,7 @@ function Employees() {
     
     try {
       await deleteEmployee(id);
+      setSuccessMessage('Employee deleted successfully!');
       fetchEmployees();
     } catch (err) {
       setError('Failed to delete employee');
@@ -317,6 +321,16 @@ function Employees() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={Boolean(successMessage)}
+        autoHideDuration={3000}
+        onClose={() => setSuccessMessage('')}
+      >
+        <Alert severity="success" sx={{ width: '100%' }}>
+          {successMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
