@@ -1,12 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.db import engine, Base, SessionLocal
+from app.database import engine, Base, SessionLocal
 from app.routers import employees, attendance
 from app import crud, schemas
-from sqlalchemy.orm import Session
 import os
 
-# Create database tables
+# Create tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -15,7 +14,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# CORS middleware
+# CORS
 allowed_origins = [
     "https://hrms-lite-eight-peach.vercel.app",
     "http://localhost:5173",
@@ -33,7 +32,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
+# Routers
 app.include_router(employees.router)
 app.include_router(attendance.router)
 
@@ -52,7 +51,6 @@ def health_check():
 
 @app.get("/dashboard/stats", response_model=schemas.DashboardStats)
 def get_dashboard_stats():
-    """Get dashboard statistics"""
     db = SessionLocal()
     try:
         stats = crud.get_dashboard_stats(db)

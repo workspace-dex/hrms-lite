@@ -5,7 +5,7 @@ from typing import List
 from fastapi import HTTPException
 
 from app.models import Employee, Attendance, AttendanceStatus
-from app.schemas import EmployeeCreate, EmployeeResponse, AttendanceCreate
+from app.schemas import EmployeeCreate, AttendanceCreate
 
 def get_employee_by_id(db: Session, employee_id: int):
     return db.query(Employee).filter(Employee.id == employee_id).first()
@@ -16,7 +16,7 @@ def get_employee_by_employee_id(db: Session, employee_id: str):
 def get_employee_by_email(db: Session, email: str):
     return db.query(Employee).filter(Employee.email == email).first()
 
-def get_employees(db: Session, skip: int = 0, limit: int = 100) -> List[Employee]:
+def get_employees(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Employee).offset(skip).limit(limit).all()
 
 def create_employee(db: Session, employee: EmployeeCreate):
@@ -36,7 +36,6 @@ def delete_employee(db: Session, employee_id: int):
     db_employee = get_employee_by_id(db, employee_id)
     if not db_employee:
         raise HTTPException(status_code=404, detail="Employee not found")
-    
     db.delete(db_employee)
     db.commit()
     return db_employee
@@ -75,24 +74,24 @@ def get_all_attendance(db: Session, skip: int = 0, limit: int = 100):
 def get_dashboard_stats(db: Session):
     today = date.today()
     
-    total_employees = db.query(func.count(Employee.id)).scalar()
+    total_employees = db.query(func.count(Employee.id)).scalar() or 0
     
     present_today = db.query(func.count(Attendance.id)).filter(
         and_(
             Attendance.date == today,
             Attendance.status == AttendanceStatus.PRESENT
         )
-    ).scalar()
+    ).scalar() or 0
     
     absent_today = db.query(func.count(Attendance.id)).filter(
         and_(
             Attendance.date == today,
             Attendance.status == AttendanceStatus.ABSENT
         )
-    ).scalar()
+    ).scalar() or 0
     
     return {
-        "total_employees": total_employees or 0,
-        "present_today": present_today or 0,
-        "absent_today": absent_today or 0
+        "total_employees": total_employees,
+        "present_today": present_today,
+        "absent_today": absent_today
     }
