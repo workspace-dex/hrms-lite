@@ -1,20 +1,33 @@
+"""
+HRMS Lite - Main Application
+
+FastAPI application entry point with CORS and router configuration.
+"""
+
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.database import engine, Base, SessionLocal
 from app.routers import employees, attendance
 from app import crud, schemas
-import os
 
-# Create tables
+
+# =============================================================================
+# Application Setup
+# =============================================================================
+
+# Create database tables
 Base.metadata.create_all(bind=engine)
 
+# Initialize FastAPI app
 app = FastAPI(
     title="HRMS Lite API",
     description="Human Resource Management System API",
     version="1.0.0"
 )
 
-# CORS
+# Configure CORS
 allowed_origins = [
     "https://hrms-lite-eight-peach.vercel.app",
     "http://localhost:5173",
@@ -32,12 +45,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Routers
+# Include routers
 app.include_router(employees.router)
 app.include_router(attendance.router)
 
+
+# =============================================================================
+# Routes
+# =============================================================================
+
+
 @app.get("/")
 def read_root():
+    """Root endpoint with API information."""
     return {
         "message": "Welcome to HRMS Lite API",
         "docs": "/docs",
@@ -45,12 +65,16 @@ def read_root():
         "status": "running"
     }
 
+
 @app.get("/health")
 def health_check():
+    """Health check endpoint."""
     return {"status": "healthy"}
+
 
 @app.get("/dashboard/stats", response_model=schemas.DashboardStats)
 def get_dashboard_stats():
+    """Get dashboard statistics."""
     db = SessionLocal()
     try:
         stats = crud.get_dashboard_stats(db)
