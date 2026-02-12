@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.database import engine, Base
+from app.db import engine, Base, SessionLocal
 from app.routers import employees, attendance
 from app import crud, schemas
 from sqlalchemy.orm import Session
-from app.database import SessionLocal
 import os
 
 # Create database tables
