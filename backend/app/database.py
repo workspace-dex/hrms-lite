@@ -5,6 +5,7 @@ Database session management and SQLAlchemy setup for PostgreSQL.
 """
 
 import os
+import re
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -23,11 +24,20 @@ if DATABASE_URL.startswith("sqlite"):
         connect_args={"check_same_thread": False}
     )
 else:
-    # PostgreSQL with SSL for production (Supabase)
+    # PostgreSQL with pg8000 driver and SSL for Supabase
+    # Auto-convert postgresql:// to postgresql+pg8000:// if needed
+    if DATABASE_URL.startswith("postgresql://"):
+        DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+pg8000://", 1)
+    elif DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+pg8000://", 1)
+    
     engine = create_engine(
         DATABASE_URL,
         pool_pre_ping=True,  # Verify connection before using
         pool_recycle=300,    # Recycle connections after 5 minutes
+        connect_args={
+            "sslmode": "require"  # Required for Supabase
+        }
     )
 
 # Create session factory
