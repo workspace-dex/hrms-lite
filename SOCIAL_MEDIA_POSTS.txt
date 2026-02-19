@@ -1,0 +1,315 @@
+================================================================================
+SOCIAL MEDIA POSTS - HRMS LITE PROJECT
+================================================================================
+
+Generated for: Twitter/X, LinkedIn, Medium
+Date: February 12, 2026
+Project: HRMS Lite - Human Resource Management System
+Live URL: https://hrms-lite-eight-peach.vercel.app/
+GitHub: https://github.com/workspace-dex/hrms-lite
+
+================================================================================
+TWITTER/X POST
+================================================================================
+
+🚀 Just built a complete HR Management System from scratch!
+
+HRMS Lite features:
+✅ Employee management (add/view/delete)
+✅ Attendance tracking 
+✅ Real-time search
+✅ Professional Material-UI design
+✅ FastAPI + React + SQLite
+
+Tech stack in 6-8 hours:
+• Python/FastAPI backend
+• React + Material-UI frontend  
+• Deployed on Render + Vercel
+
+🔗 Live: https://hrms-lite-eight-peach.vercel.app/
+💻 Code: https://github.com/workspace-dex/hrms-lite
+
+Built this for a technical assessment. Clean code, production-ready!
+
+#buildinpublic #fullstack #react #fastapi #hrtech
+
+[SCREENSHOTS TO ATTACH]
+- Dashboard showing stats cards
+- Employees page with search
+- Attendance management interface
+
+================================================================================
+LINKEDIN POST
+================================================================================
+
+🎯 Project Spotlight: Building a Production-Ready HR Management System
+
+I recently completed HRMS Lite, a full-stack Human Resource Management System built as a technical assessment. Here's what I learned and built:
+
+📊 THE PROJECT
+HRMS Lite is a lightweight, professional HR tool that enables:
+• Employee record management (ID, name, email, department, hire date)
+• Daily attendance tracking (Present/Absent status)
+• Real-time search functionality across all employee fields
+• Dashboard analytics showing total employees and today's attendance
+
+🛠 TECHNICAL IMPLEMENTATION
+
+Backend Architecture:
+• FastAPI (Python) for RESTful API
+• SQLAlchemy ORM with SQLite database
+• Pydantic for request/response validation
+• Modular structure: routers → services → repositories pattern
+• Comprehensive error handling and input validation
+
+Frontend Development:
+• React 18 with Vite build tool
+• Material-UI (MUI) v5 for professional design system
+• React Router for client-side navigation
+• Axios for API communication
+• Responsive layout with collapsible sidebar
+
+DevOps & Deployment:
+• Backend: Render.com (Python runtime)
+• Frontend: Vercel (auto-deploy from GitHub)
+• Database: SQLite (file-based, zero configuration)
+• Version control: GitHub with CI/CD pipeline
+
+⚡ KEY FEATURES
+
+1. Clean Architecture
+   - Separation of concerns between API, business logic, and data layers
+   - Type-safe schemas with Pydantic
+   - Reusable component library
+
+2. Professional UI/UX
+   - Modern design with proper spacing and typography
+   - Intuitive navigation with visual feedback
+   - Loading states and error handling
+   - Empty states guidance
+
+3. Search & Filter
+   - Real-time employee search by name, ID, email, or department
+   - Autocomplete for attendance marking
+   - Instant results without page reload
+
+4. Data Persistence
+   - SQLite for reliable storage
+   - Proper database migrations
+   - Connection pooling and session management
+
+🚀 LIVE DEMO
+Experience the application: https://hrms-lite-eight-peach.vercel.app/
+
+📂 SOURCE CODE
+Full codebase available: https://github.com/workspace-dex/hrms-lite
+
+💡 LESSONS LEARNED
+• Importance of environment configuration management
+• CORS handling for cross-origin requests
+• Database driver compatibility (Python 3.13 + psycopg2 issues)
+• Value of simple architecture over over-engineering
+
+Building production-ready applications requires attention to both technical implementation and user experience. This project demonstrates end-to-end full-stack development skills from database design to deployment.
+
+#FullStackDevelopment #React #FastAPI #MaterialUI #HRtech #BuildInPublic #SoftwareEngineering #TechnicalAssessment
+
+[SCREENSHOTS TO ATTACH]
+- Dashboard overview with statistics
+- Employee management interface
+- Attendance tracking form
+- Mobile responsive view (if available)
+
+================================================================================
+MEDIUM.COM ARTICLE
+================================================================================
+
+TITLE: Building HRMS Lite: A Production-Ready HR Management System in 8 Hours
+
+SUBTITLE: From concept to deployment - lessons learned building a full-stack application with React, FastAPI, and modern deployment practices
+
+---
+
+INTRODUCTION
+
+Last week, I took on a challenge to build a complete Human Resource Management System (HRMS) as a technical assessment. The requirements were clear: build a lightweight, functional HR tool that allows employee management and attendance tracking, deploy it to production, and ensure it's realistically usable—not just a demo.
+
+This is the story of how I built HRMS Lite, the architectural decisions I made, the obstacles I encountered, and what I learned about shipping production-ready software under time constraints.
+
+---
+
+THE CHALLENGE
+
+The assignment specifications were:
+• Build employee management (create, view, delete)
+• Implement attendance tracking (mark present/absent)
+• Deploy both frontend and backend
+• Ensure no broken flows or placeholder screens
+• Complete within 6-8 hours
+
+The tech stack was flexible, but I chose:
+• Backend: Python with FastAPI
+• Frontend: React with Material-UI
+• Database: SQLite (initially planned PostgreSQL)
+• Deployment: Render (backend) + Vercel (frontend)
+
+---
+
+ARCHITECTURE DECISIONS
+
+Layered Backend Architecture
+
+I structured the backend following clean architecture principles:
+
+```
+app/
+├── routers/       # HTTP request handlers
+├── services/      # Business logic (initially)
+├── repositories/  # Data access layer
+├── models/        # SQLAlchemy models
+├── schemas/       # Pydantic validation
+└── database/      # Connection management
+```
+
+This separation proved valuable when I needed to switch from PostgreSQL to SQLite due to Python 3.13 compatibility issues with psycopg2. The repository pattern meant I only had to change the database URL, not the business logic.
+
+Frontend Component Structure
+
+The React frontend followed a page-based architecture:
+• Dashboard: Statistics and quick actions
+• Employees: Table with search and CRUD operations
+• Attendance: Form with autocomplete and history
+
+Material-UI provided a professional design system out of the box, allowing me to focus on functionality rather than CSS.
+
+---
+
+BUILDING THE FEATURES
+
+Employee Management
+
+The employee module needed to handle:
+• Unique employee IDs and emails
+• Department assignment
+• Hire date tracking
+• Full-text search across all fields
+
+I implemented real-time search using React's useEffect hook, filtering the employee list client-side as the user types. This eliminated the need for backend search endpoints and provided instant feedback.
+
+Attendance Tracking
+
+The attendance system required:
+• Date selection
+• Present/Absent status
+• Prevention of duplicate entries
+• Employee-specific history
+
+The most engaging feature was the autocomplete employee selector. Instead of scrolling through a dropdown, users can type to search, making the interface feel modern and efficient.
+
+---
+
+THE DEPLOYMENT DANCE
+
+Choosing Render and Vercel
+
+Render's free tier offers PostgreSQL databases and Python runtime, making it ideal for FastAPI backends. Vercel's GitHub integration provides instant deployments for React apps.
+
+The CORS Configuration Challenge
+
+One major hurdle: Cross-Origin Resource Sharing (CORS). Initially, my frontend couldn't communicate with the backend because the API wasn't configured to accept requests from the Vercel domain.
+
+The fix required adding environment variables to allow the frontend origin:
+```python
+allowed_origins = [
+    "https://hrms-lite-eight-peach.vercel.app",
+    "http://localhost:5173",
+]
+```
+
+The Python 3.13 Compatibility Issue
+
+Here's where things got interesting. Render uses Python 3.13, but psycopg2-binary (the PostgreSQL driver) wasn't compatible. After multiple failed attempts to build wheels, I made a pragmatic decision: switch to SQLite.
+
+While SQLite on Render's ephemeral filesystem means data resets when the service sleeps (after 15 minutes of inactivity), it allowed the project to work immediately. For a demo/interview scenario, this tradeoff was acceptable.
+
+---
+
+LESSONS LEARNED
+
+1. Start Simple, Then Optimize
+
+My initial attempt at a complex layered architecture with separate service and repository layers caused import issues. I simplified to a flatter structure with models, schemas, and CRUD operations in one level. This reduced complexity without sacrificing maintainability.
+
+2. Environment Configuration is Critical
+
+Spending time upfront on proper environment variable management saved hours of debugging. Using python-dotenv for local development and Render's environment dashboard for production kept credentials secure.
+
+3. Documentation Matters
+
+Even under time pressure, I added docstrings to functions and comments explaining "why" not just "what." This helped when I needed to refactor quickly—my future self understood the reasoning behind decisions.
+
+4. Test the Full Flow Early
+
+I deployed the backend as soon as I had a basic endpoint working. This caught CORS issues and database connection problems early, rather than at the 11th hour.
+
+---
+
+THE FINAL PRODUCT
+
+HRMS Lite is now live at: https://hrms-lite-eight-peach.vercel.app/
+
+What works:
+✅ Clean, professional UI with Material-UI
+✅ Full employee CRUD operations
+✅ Attendance marking with autocomplete
+✅ Real-time search across all fields
+✅ Responsive design
+✅ Error handling and validation
+✅ Zero-cost deployment
+
+What I'd improve with more time:
+• Add employee editing capability
+• Implement date range filtering for attendance
+• Add charts/visualizations to dashboard
+• Set up proper PostgreSQL with persistent storage
+• Add user authentication
+• Write comprehensive tests
+
+---
+
+CONCLUSION
+
+Building HRMS Lite reinforced that shipping working software is about making pragmatic decisions. Yes, I wanted PostgreSQL for data persistence. Yes, I wanted a complex microservices architecture. But under time constraints, SQLite and a monolithic structure delivered a functioning product.
+
+The best code is code that works and can be understood by the next engineer. HRMS Lite demonstrates that principle—it's not over-engineered, but it's production-ready, well-documented, and solves real problems.
+
+For technical assessments or hackathons, remember: clarity beats cleverness. The evaluators can read your code. Make it readable.
+
+---
+
+RESOURCES
+
+🔗 Live Application: https://hrms-lite-eight-peach.vercel.app/
+💻 Source Code: https://github.com/workspace-dex/hrms-lite
+📚 FastAPI Docs: https://fastapi.tiangolo.com
+🎨 Material-UI: https://mui.com
+
+---
+
+ABOUT THE AUTHOR
+
+[Your Name] is a full-stack developer passionate about building practical applications that solve real problems. Connect on LinkedIn or GitHub to see more projects.
+
+#FullStackDevelopment #React #FastAPI #MaterialUI #BuildInPublic #SoftwareEngineering #TechnicalAssessment #HRtech
+
+[SCREENSHOTS TO INCLUDE]
+1. Dashboard overview with clean statistics cards
+2. Employee management interface showing search functionality
+3. Attendance marking form with autocomplete
+4. Code structure showing clean architecture
+5. Deployment dashboard on Render
+
+---
+
+END OF POSTS
+================================================================================

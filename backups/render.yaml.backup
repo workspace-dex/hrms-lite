@@ -9,4 +9,4 @@ services:
       - key: ALLOWED_ORIGINS
         value: "https://hrms-lite-eight-peach.vercel.app"
       - key: DATABASE_URL
-        sync: false  # Set this manually in Render dashboard with your Supabase connection string
+        value: "sqlite:///./hrms.db"
