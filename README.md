@@ -206,8 +206,8 @@ VITE_API_URL=https://your-backend.onrender.com
 
 ## 🔗 Live Demo
 
-- **Frontend**: [Your Vercel URL]
-- **Backend**: [Your Render URL]
+- **Frontend**: https://hrms-lite-eight-peach.vercel.app/
+- **Backend**: https://hrms-lite-e8zo.onrender.com/
 
 ## 📄 License
 
